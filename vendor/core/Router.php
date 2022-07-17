@@ -1,5 +1,7 @@
 <?php
 
+namespace vendor\core;
+
 class Router
 {
     protected static array $routes = [];
@@ -32,6 +34,7 @@ class Router
                 if (!isset($route['action'])) {
                     $route['action'] = 'index';
                 }
+                $route['controller'] = self::upperCamelCase($route['controller']);
                 self::$route = $route;
                 return true;
             }
@@ -41,15 +44,17 @@ class Router
 
     public static function dispatch($url)
     {
+        $url = self::removeQueryString($url);
         if (self::matchRoute($url)) {
-            $controller = self::upperCamelCase(self::$route['controller']);
+            $controller = 'app\controllers\\' . self::$route['controller'];
+//            debug(self::$route);
             if (class_exists($controller)) {
-                $cObj = new $controller();//create an instance of controller object
-                $action = self::lowerCamelCase(self::$route['action'])  . 'Action';
+                $cObj = new $controller(self::$route);//create an instance of controller object
+                $action = self::lowerCamelCase(self::$route['action']) . 'Action';
                 if (method_exists($cObj, $action)) {
                     $cObj->$action();
                 } else {
-                    echo 'Method ' . $action . ' doesnot exists ' . 'Controller = '.$controller . ' ';
+                    echo 'Method ' . $action . ' does not exists ' . 'Controller = ' . $controller . ' ';
                 }
             } else {
                 debug('Controller ' . $controller . ' was not founded');
@@ -64,10 +69,25 @@ class Router
     {
         return str_replace(' ', '', ucwords(str_replace('-', ' ', $name)));
     }
+
     protected static function lowerCamelCase($name)
     {
-//        $name = str_replace('-',' ',$name);
-//        $name = lcfirst($name);
         return str_replace(' ', '', lcfirst(str_replace('-', ' ', $name)));
+    }
+
+    protected static function removeQueryString($url)
+    {
+        if ($url)
+        {
+            $params = explode('&', $url, 2);
+            if (strpos($params[0], '=') === false)
+            {
+                return rtrim($params[0], '/');
+
+            }else
+            {
+                return '';
+            }
+        }
     }
 }

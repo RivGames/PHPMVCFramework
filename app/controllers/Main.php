@@ -1,9 +1,9 @@
 <?php
-
+namespace app\controllers;
 class Main
 {
-    public function __construct()
+    public function indexAction()
     {
-        debug('class=Main');
+        echo 'indexActionMain';
     }
 }
