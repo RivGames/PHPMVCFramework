@@ -1,15 +1,15 @@
 <?php
 namespace app\controllers;
-class PostNew
+class PostNewController extends AppController
 {
     public function __construct()
     {
-        debug('class=PostNew');
+        debug('class=PostNewController');
     }
 
     public function indexAction()
     {
-        echo 'PostNew->method=index';
+        echo 'PostNewController->method=index';
     }
 
     public function testAction()
@@ -19,7 +19,7 @@ class PostNew
 
     public function testPageAction()
     {
-        echo 'hi its method testPage from PostNew';
+        echo 'hi its method testPage from PostNewController';
     }
 
     public function before()

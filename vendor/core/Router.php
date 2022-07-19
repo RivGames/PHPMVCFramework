@@ -46,13 +46,14 @@ class Router
     {
         $url = self::removeQueryString($url);
         if (self::matchRoute($url)) {
-            $controller = 'app\controllers\\' . self::$route['controller'];
+            $controller = 'app\controllers\\' . self::$route['controller'] . 'Controller';
 //            debug(self::$route);
             if (class_exists($controller)) {
                 $cObj = new $controller(self::$route);//create an instance of controller object
                 $action = self::lowerCamelCase(self::$route['action']) . 'Action';
                 if (method_exists($cObj, $action)) {
                     $cObj->$action();
+                    $cObj->getView();
                 } else {
                     echo 'Method ' . $action . ' does not exists ' . 'Controller = ' . $controller . ' ';
                 }
