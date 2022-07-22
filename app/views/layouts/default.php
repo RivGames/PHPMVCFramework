@@ -8,7 +8,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>hellow</h2>
     <?= $content ?>
 </body>
 </html>
